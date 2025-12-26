@@ -1,0 +1,88 @@
+.main {
+  min-height: calc(100vh - 4rem);
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.mapLayout {
+  display: grid;
+  grid-template-columns: 300px 1fr 400px;
+  gap: 2rem;
+  height: calc(100vh - 8rem);
+  min-height: 600px;
+
+  @media (max-width: 1400px) {
+    grid-template-columns: 280px 1fr 380px;
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    height: auto;
+  }
+}
+
+.listSection {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 1024px) {
+    max-height: 400px;
+    order: 1;
+  }
+}
+
+.mapSection {
+  min-height: 400px;
+  height: 100%;
+}
+
+.cardSection {
+  overflow-y: auto;
+  max-height: calc(100vh - 8rem);
+
+  @media (max-width: 1024px) {
+    max-height: none;
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+
+  .dark & {
+    color: #9ca3af;
+  }
+}
+
+.emptyStateTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+
+  .dark & {
+    color: #f9fafb;
+  }
+}
+
+.emptyStateText {
+  color: #6b7280;
+
+  .dark & {
+    color: #9ca3af;
+  }
+}
+
