@@ -1,7 +1,10 @@
 /**
  * PM2 Ecosystem Configuration for GolfMaps
  * 
- * Usage:
+ * NOTE: This file is for EC2/self-hosted deployments only.
+ * For Vercel deployments, this file is not used - Vercel handles process management automatically.
+ * 
+ * Usage (EC2 only):
  *   pm2 start ecosystem.config.js
  *   pm2 save
  *   pm2 startup  # Follow instructions to enable auto-start on boot

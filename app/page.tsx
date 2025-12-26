@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { createClient } from '@/lib/supabase/client';
 import { Course, Profile } from '@/lib/types';
 import { useFavorites } from '@/hooks/useFavorites';
 import Map from '@/components/Map';
@@ -9,6 +9,9 @@ import CourseCard from '@/components/CourseCard';
 import CourseList, { TabKey } from '@/components/CourseList';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import styles from '@/styles/layout.module.scss';
+
+// Create client instance for this component
+const supabase = createClient();
 
 export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);

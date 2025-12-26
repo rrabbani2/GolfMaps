@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '@/lib/supabaseServer';
-import { getCachedWeather, setCachedWeather, createCacheKey } from '@/lib/weather';
+import { createClient } from '@/lib/supabase/server';
 import { WeatherData } from '@/lib/types';
 import { calculateCourseCondition } from '@/lib/calculateCourseCondition';
 
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     // If courseId provided, look up course
     if (courseId) {
-      const supabase = await createServerClient();
+      const supabase = await createClient();
       const { data: course, error } = await supabase
         .from('courses')
         .select('lat, lng')
@@ -52,13 +51,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Check cache
-    const cacheKey = createCacheKey(finalLat, finalLng);
-    const cached = getCachedWeather(cacheKey);
-    if (cached) {
-      console.log('[API /weather] Returning cached data');
-      return NextResponse.json(cached);
-    }
+    // Note: In-memory cache is not reliable on serverless (Vercel)
+    // We rely on HTTP caching headers instead (see response below)
 
     // Fetch from weather API
     const weatherApiKey = process.env.WEATHER_API_KEY;
@@ -123,11 +117,16 @@ export async function GET(request: NextRequest) {
       conditionScore,
     };
 
-    // Cache the result
-    setCachedWeather(cacheKey, weatherData);
-    console.log('[API /weather] Weather data cached with condition score:', conditionScore);
+    console.log('[API /weather] Weather data fetched with condition score:', conditionScore);
 
-    return NextResponse.json(weatherData);
+    // Set HTTP cache headers for Vercel edge/CDN caching
+    // s-maxage: cache at edge for 10 minutes
+    // stale-while-revalidate: serve stale content while revalidating for another 10 minutes
+    return NextResponse.json(weatherData, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=600',
+      },
+    });
   } catch (error: any) {
     console.error('[API /weather] Unexpected error:', error);
     return NextResponse.json(

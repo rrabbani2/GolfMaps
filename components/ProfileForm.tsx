@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { createClient } from '@/lib/supabase/client';
 import { Profile, SkillLevel } from '@/lib/types';
+
+// Create client instance for this component
+const supabase = createClient();
 
 export default function ProfileForm() {
   const [profile, setProfile] = useState<Partial<Profile>>({

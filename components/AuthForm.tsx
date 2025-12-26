@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { createClient } from '@/lib/supabase/client';
+
+// Create client instance for this component
+const supabase = createClient();
 
 // Helper function to convert username to internal email format for Supabase
 // Supabase requires an email, so we use a format that passes validation
